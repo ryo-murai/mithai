@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Status</title>
+
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css}">
+</head>
+<body>
+  <div class="container">
+    <div class="main">
+      <div class="text" th:text="${status.text}">
+      </div>
+      <div class="text" th:text="${status.createdAt}">
+      </div>
+      <div class="">
+        <a th:if="${status.quotedStatus != null}" th:href="@{url=${status.quotedStatusId}}"
+            class="btn btn-primary">
+          引用を開く
+        </a>
+      </div>
+      <div class="text" th:text="|${status.user.screenName} ( ${status.user.name} )|">
+      </div>
+      <div class="">
+        <span>url entity</span>
+        <ul th:each="urlEntity: ${status.URLEntities}">
+          <li th:text="${urlEntity.URL}"></li>
+        </ul>
+      </div>
+      <div class="">
+        <span>media entity</span>
+        <ul th:each="mediaEntity: ${status.mediaEntities}">
+          <li
+              th:text="|${mediaEntity.id}:${mediaEntity.type} -- ${mediaEntity.mediaURL}|">
+          </li>
+        </ul>
+      </div>
+      <div class="">
+        <span>extended media entity</span>
+        <ul th:each="mediaEntity: ${status.extendedMediaEntities}">
+          <li
+              th:text="|${mediaEntity.id}:${mediaEntity.type} -- ${mediaEntity.mediaURL}|">
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <a href="/" class="btn btn-default">戻る</a>
+ </div>
+</body>
+</html>

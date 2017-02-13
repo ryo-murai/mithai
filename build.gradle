@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.1.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+  ext {
+    springBootVersion = '1.5.1.RELEASE'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
 }
 
 apply plugin: 'java'
@@ -15,18 +15,33 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 jar {
-	baseName = 'mithai'
+  baseName = 'mithai'
 }
 
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+  compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
+  compile 'org.springframework.boot:spring-boot-starter-web'
+
+  compile 'org.webjars:bootstrap:3.3.7'
+
+  compile 'org.twitter4j:twitter4j-core:4.0.6'
+
+  compile 'org.slf4j:slf4j-api'
+
+  compile 'org.springframework.boot:spring-boot-devtools'
+  compileOnly 'org.projectlombok:lombok:1.16.14'
+
+
+  runtime 'net.sourceforge.nekohtml:nekohtml:1.9.21'
+  runtime 'ch.qos.logback:logback-classic'
+
+
+  testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
