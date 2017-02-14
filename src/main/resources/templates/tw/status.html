@@ -12,6 +12,16 @@
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
         th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.min.css}">
+
+  <style type="text/css">
+    img {
+      opacity: 0.2;
+    }
+
+    img:hover {
+      opacity: 1.0;
+    }
+  </style>
 </head>
 <body>
 <div class="container">
@@ -24,8 +34,8 @@
       <span class="text" th:text="${status.createdAt}"></span>
     </div>
     <div class="">
-      <a th:if="${status.quotedStatus != null}" th:href="@{|url=${status.quotedStatusId}|}"
-         class="btn btn-primary">
+      <a th:if="${status.quotedStatus != null}" th:href="@{${status.quotedStatusId}}"
+         class="btn btn-xs btn-primary">
         引用を開く
       </a>
     </div>
@@ -33,7 +43,9 @@
     <div class="">
       <ul th:each="urlEntity: ${status.URLEntities}">
         <li>
-          <span><a th:text="${urlEntity.URL}" th:href="@{${urlEntity.URL}}"></a></span>
+          <span>
+            <a th:text="${urlEntity.URL}" th:href="@{${urlEntity.URL}}" target="_blank"></a>
+          </span>
         </li>
       </ul>
     </div>
@@ -42,7 +54,9 @@
       <div class="col-xs-6 col-md-3" th:each="mediaEntity: ${status.mediaEntities}">
         <a th:href="@{|/tw/media?url=${mediaEntity.mediaURL}|}" class="thumbnail" target="_blank">
           <img th:src="@{|/tw/media?url=${mediaEntity.mediaURL}|}" src="" />
-          <div class="caption"><span th:text="|${mediaEntity.id}:${mediaEntity.type}|">なまえ</span></div>
+          <div class="caption">
+            <span th:text="|${mediaEntity.id}:${mediaEntity.type}|">なまえ</span>
+          </div>
         </a>
       </div>
     </div>
