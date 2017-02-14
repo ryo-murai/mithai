@@ -61,11 +61,12 @@ public class TwController {
   @RequestMapping("/media")
   public ResponseEntity<InputStreamResource> media(@RequestParam("url") String urlString) {
     try {
-      Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8880));
+//      Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8880));
 
 
       URL url = new URL(urlString);
-      HttpURLConnection httpConn = (HttpURLConnection) url.openConnection(proxy);
+      //HttpURLConnection httpConn = (HttpURLConnection) url.openConnection(proxy);
+      HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
       httpConn.setInstanceFollowRedirects(true);
       httpConn.connect();
 //    String contentLength = httpConn.getHeaderField("Content-Length");
