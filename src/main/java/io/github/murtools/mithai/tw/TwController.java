@@ -1,10 +1,22 @@
 package io.github.murtools.mithai.tw;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
@@ -44,6 +56,40 @@ public class TwController {
     model.addAttribute("status", status);
 
     return "tw/status";
+  }
+
+  @RequestMapping("/media")
+  public ResponseEntity<InputStreamResource> media(@RequestParam("url") String urlString) {
+    try {
+      Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8880));
+
+
+      URL url = new URL(urlString);
+      HttpURLConnection httpConn = (HttpURLConnection) url.openConnection(proxy);
+      httpConn.setInstanceFollowRedirects(true);
+      httpConn.connect();
+//    String contentLength = httpConn.getHeaderField("Content-Length");
+//    String contentType = httpConn.getHeaderField("Content-Type");
+      HttpHeaders headers = new HttpHeaders();
+      //headers.putAll(httpConn.getHeaderFields());
+
+      httpConn.getHeaderFields().forEach((key, values) -> {
+        log.debug("key:{}, values:{}", key, values);
+        if (key != null) {
+          headers.putIfAbsent(key, values);
+        }
+      });
+
+
+      return ResponseEntity.status(httpConn.getResponseCode())
+          .headers(headers)
+          .body(new InputStreamResource(httpConn.getInputStream()));
+    } catch (IOException e) {
+      byte[] msg = e.getMessage().getBytes(StandardCharsets.UTF_8);
+      return ResponseEntity
+          .status(500)
+          .body(new InputStreamResource(new ByteArrayInputStream(msg)));
+    }
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
