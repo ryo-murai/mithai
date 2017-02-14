@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,19 +25,25 @@ public class TwController {
   private final TwService twService;
 
   @RequestMapping("/status")
-  public String status(@RequestParam("url") String url, Model model) throws Exception {
+  public String status(@RequestParam("url") String url, Model model) {
 
-    Optional<Long> idopt = twService.parseStatusIdFromUrl(url);
-    if (idopt.isPresent()) {
-      Status status = twService.getStatus(idopt.get());
-      model.addAttribute("status", status);
+    Optional<Long> idOpt = twService.parseStatusIdFromUrl(url);
+    if (idOpt.isPresent()) {
 
-      return "tw/status";
+      return "redirect:/tw/status/" + idOpt.get();
     } else {
       model.addAttribute("twError", "URLを認識できませんでした");
 
       return "index";
     }
+  }
+
+  @RequestMapping("/status/{id}")
+  public String status(@PathVariable("id") long id, Model model) throws Exception {
+    Status status = twService.getStatus(id);
+    model.addAttribute("status", status);
+
+    return "tw/status";
   }
 
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
