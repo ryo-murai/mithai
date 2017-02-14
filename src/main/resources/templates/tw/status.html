@@ -44,7 +44,7 @@
     <div class="row">
       <span>media entity</span>
       <div class="col-xs-6 col-md-3" th:each="mediaEntity: ${status.mediaEntities}">
-        <a th:href="@{${mediaEntity.mediaURL}}" class="thumbnail" target="_blank">
+        <a th:href="@{|/tw/media?url=${mediaEntity.mediaURL}|}" class="thumbnail" target="_blank">
           <img th:src="@{|/tw/media?url=${mediaEntity.mediaURL}|}" src="" />
           <div class="caption"><span th:text="|${mediaEntity.id}:${mediaEntity.type}|">なまえ</span></div>
         </a>
