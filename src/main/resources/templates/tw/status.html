@@ -16,33 +16,29 @@
 <body>
 <div class="container">
   <div class="main">
+    <h5>Tw</h5>
     <h6 th:text="|${status.user.screenName} (@${status.user.name}) :|">screen name(@user_id):</h6>
-    <div class="text" th:text="${status.text}">
-    </div>
-    <div class="text" th:text="${status.createdAt}">
+    <div class="bg-info">
+      <div class="text" th:text="${status.text}">
+      </div>
+      <span class="text" th:text="${status.createdAt}"></span>
     </div>
     <div class="">
-      <a th:if="${status.quotedStatus != null}" th:href="@{url=${status.quotedStatusId}}"
+      <a th:if="${status.quotedStatus != null}" th:href="@{|url=${status.quotedStatusId}|}"
          class="btn btn-primary">
         引用を開く
       </a>
     </div>
+    <h5>URL entities</h5>
     <div class="">
-      <span>url entity</span>
       <ul th:each="urlEntity: ${status.URLEntities}">
-        <li th:text="${urlEntity.URL}"></li>
-      </ul>
-    </div>
-    <div class="">
-      <span>media entity</span>
-      <ul th:each="mediaEntity: ${status.mediaEntities}">
-        <li
-            th:text="|${mediaEntity.id}:${mediaEntity.type} -- ${mediaEntity.mediaURL}|">
+        <li>
+          <span><a th:text="${urlEntity.URL}" th:href="@{${urlEntity.URL}}"></a></span>
         </li>
       </ul>
     </div>
+    <h5>Media entities</h5>
     <div class="row">
-      <span>media entity</span>
       <div class="col-xs-6 col-md-3" th:each="mediaEntity: ${status.mediaEntities}">
         <a th:href="@{|/tw/media?url=${mediaEntity.mediaURL}|}" class="thumbnail" target="_blank">
           <img th:src="@{|/tw/media?url=${mediaEntity.mediaURL}|}" src="" />
