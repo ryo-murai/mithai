@@ -3,19 +3,15 @@ package io.github.murtools.mithai.tw;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import io.github.murtools.mithai.http.HttpClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
@@ -35,6 +31,8 @@ import twitter4j.TwitterException;
 @Slf4j
 public class TwController {
   private final TwService twService;
+
+  private final HttpClientService httpClientService;
 
   @RequestMapping("/status")
   public String status(@RequestParam("url") String url, Model model) {
@@ -61,26 +59,11 @@ public class TwController {
   @RequestMapping("/media")
   public ResponseEntity<InputStreamResource> media(@RequestParam("url") String urlString) {
     try {
-//      Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 8880));
-
-
-      URL url = new URL(urlString);
-      //HttpURLConnection httpConn = (HttpURLConnection) url.openConnection(proxy);
-      HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+      HttpURLConnection httpConn = httpClientService.createConnection(urlString);
       httpConn.setInstanceFollowRedirects(true);
       httpConn.connect();
-//    String contentLength = httpConn.getHeaderField("Content-Length");
-//    String contentType = httpConn.getHeaderField("Content-Type");
-      HttpHeaders headers = new HttpHeaders();
-      //headers.putAll(httpConn.getHeaderFields());
 
-      httpConn.getHeaderFields().forEach((key, values) -> {
-        log.debug("key:{}, values:{}", key, values);
-        if (key != null) {
-          headers.putIfAbsent(key, values);
-        }
-      });
-
+      HttpHeaders headers = HttpClientService.createHeadersFrom(httpConn);
 
       return ResponseEntity.status(httpConn.getResponseCode())
           .headers(headers)

@@ -43,8 +43,7 @@ public class TwService {
 
   public Status getStatus(long id) throws TwitterException {
     Status status = tw.showStatus(id);
-    //String text = status.getText();
-    //status.getMediaEntities();
+
     return status;
   }
 
