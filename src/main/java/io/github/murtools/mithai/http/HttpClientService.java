@@ -14,10 +14,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Max;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class HttpClientService {
+  private static final int MaxNumRedirects = 20;
+
   private final Environment env;
 
   public HttpURLConnection createConnection(String urlString) throws IOException {
@@ -29,6 +33,34 @@ public class HttpClientService {
       return (HttpURLConnection) url.openConnection(createProxy(httpProxy));
     } else {
       return (HttpURLConnection) url.openConnection();
+    }
+  }
+
+  public String getRedirectUrl(String sourceUrl) throws IOException {
+    return getRedirectUrl(sourceUrl, 1);
+  }
+
+  public String getRedirectUrl(String sourceUrl, int numRedirects) throws IOException {
+    if(numRedirects > MaxNumRedirects) {
+      log.error("num redirects reached the limit. current url: {}", sourceUrl);
+      return null;
+    }
+
+    HttpURLConnection conn = createConnection(sourceUrl);
+    conn.setInstanceFollowRedirects(false);
+    conn.setRequestMethod("HEAD");
+    conn.connect();
+
+    if(conn.getResponseCode() == 200) {
+      log.info("HEAD {} succeeded 200", sourceUrl);
+      return sourceUrl;
+    } else if(conn.getResponseCode() == 301) {
+      String redirectLocation = conn.getHeaderField("Location");
+      return getRedirectUrl(redirectLocation, numRedirects + 1);
+    } else {
+      log.error("accessing url:[{}] response status: {}, message: {}", sourceUrl,
+              conn.getResponseCode(), conn.getResponseMessage());
+      return null;
     }
   }
 

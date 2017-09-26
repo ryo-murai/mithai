@@ -35,15 +35,25 @@ public class TwController {
   private final HttpClientService httpClientService;
 
   @RequestMapping("/status")
-  public String status(@RequestParam("url") String url, Model model) {
+  public String status(@RequestParam("url") String url, Model model) throws IOException {
 
     Optional<Long> idOpt = twService.parseStatusIdFromUrl(url);
     if (idOpt.isPresent()) {
-
       return "redirect:/tw/status/" + idOpt.get();
     } else {
-      model.addAttribute("twError", "URLを認識できませんでした");
+      String redirectUrl = httpClientService.getRedirectUrl(url);
 
+      if(redirectUrl != null) {
+        Optional<Long> idOptRedirect = twService.parseStatusIdFromUrl(redirectUrl);
+        if (idOptRedirect.isPresent()) {
+          return "redirect:/tw/status/" + idOptRedirect.get();
+        } else {
+          model.addAttribute("url", redirectUrl);
+          return "tw/confirm";
+        }
+      }
+
+      model.addAttribute("twError", "URLを認識できませんでした");
       return "index";
     }
   }
