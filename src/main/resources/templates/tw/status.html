@@ -50,10 +50,10 @@
           <span>
             <a th:text="${urlEntity.URL}" th:href="@{${urlEntity.URL}}" target="_blank"></a>
           </span>
-          <a th:href="@{${urlEntity.URL}}" target="_blank" class="btn btn-primary">
+          <a th:href="@{|/tw/status?url=${urlEntity.URL}|}" target="_blank" class="btn btn-primary">
             ReOpen
             <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
-                        </span>
+            </span>
           </a>
         </li>
       </ul>
