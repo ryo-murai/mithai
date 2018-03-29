@@ -95,6 +95,7 @@ public class TwController {
       String encryptoUrl = cipherService.encryptUrl(entity.getMediaURL());
       return new MediaEntityExInfo(entity, encryptoUrl);
     } catch (GeneralSecurityException e) {
+      log.warn("could not encrypt media url", e);
       return new  MediaEntityExInfo(entity, "/");  // todo: set alternative url
     }
   }

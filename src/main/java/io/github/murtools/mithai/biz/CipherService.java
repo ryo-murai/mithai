@@ -12,28 +12,28 @@ import java.util.Base64;
 
 @Service
 public class CipherService {
-    public static final String BRIDGE_KEY = "@1ways 0n the run";
+    public static final String BRIDGE_KEY = "@1ways 0n the rn";  // 16 bytes (128bit)
 
     private static Key key = new SecretKeySpec(BRIDGE_KEY.getBytes(StandardCharsets.UTF_8), "AES");
 
-    public String decryptBase64Url(String urlAESString) throws GeneralSecurityException {
-        byte[] crypted = Base64.getDecoder().decode(urlAESString);
+    public String decryptUrl(String encUrl) throws GeneralSecurityException {
+        byte[] decoded = Base64.getDecoder().decode(encUrl);
 
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, key);
-        byte[] decrypted = cipher.doFinal(crypted);
-        String urlString = new String(decrypted, StandardCharsets.UTF_8);
-        return urlString;
+        byte[] decrypted = cipher.doFinal(decoded);
+        String plainUrl = new String(decrypted, StandardCharsets.UTF_8);
+        return plainUrl;
     }
 
-    public String encryptUrl(String rawUrl) throws GeneralSecurityException {
+    public String encryptUrl(String plainUrl) throws GeneralSecurityException {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, key);
-        byte[] encrypted = cipher.doFinal(rawUrl.getBytes(StandardCharsets.UTF_8));
-
-        byte[] base64Bytes = Base64.getEncoder().encode(encrypted);
-        String urlString = new String(base64Bytes, StandardCharsets.UTF_8);
+        byte[] encrypted = cipher.doFinal(plainUrl.getBytes(StandardCharsets.UTF_8));
+        byte[] encoded = Base64.getEncoder().encode(encrypted);
+        String urlString = new String(encoded, StandardCharsets.UTF_8);
 
         return urlString;
     }
+
 }

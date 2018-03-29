@@ -31,7 +31,7 @@ public class BridgeController {
     public ResponseEntity<InputStreamResource> bridge(@RequestParam("u") String urlAESString) {
 
         try {
-            String urlString = cipherService.decryptBase64Url(urlAESString);
+            String urlString = cipherService.decryptUrl(urlAESString);
 
             HttpURLConnection httpConn = httpClientService.createConnection(urlString);
             httpConn.setInstanceFollowRedirects(true);
