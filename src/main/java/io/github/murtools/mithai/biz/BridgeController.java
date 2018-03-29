@@ -2,6 +2,7 @@ package io.github.murtools.mithai.biz;
 
 import io.github.murtools.mithai.http.HttpClientService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.security.GeneralSecurityException;
 import java.security.Key;
 import java.util.Base64;
 
+@Slf4j
 @Controller
 @RequestMapping("/biz")
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class BridgeController {
 
         try {
             String urlString = cipherService.decryptUrl(urlAESString);
+            log.info("{} -> {}", urlAESString, urlString);
 
             HttpURLConnection httpConn = httpClientService.createConnection(urlString);
             httpConn.setInstanceFollowRedirects(true);

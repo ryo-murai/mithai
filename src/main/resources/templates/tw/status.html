@@ -61,8 +61,8 @@
     <h5>Media entities</h5>
     <div class="row">
       <div class="col-xs-6 col-md-3" th:each="mediaEntity: ${mediaEntities}">
-        <a th:href="@{|/br?u=${mediaEntity.encUrl}|}" class="thumbnail" target="_blank">
-          <img th:src="@{|/br?u=${mediaEntity.encUrl}|}" src="" />
+        <a th:href="@{|/biz/br?u=${mediaEntity.encUrl}|}" class="thumbnail" target="_blank">
+          <img th:src="@{|/biz/br?u=${mediaEntity.encUrl}|}" src="" />
           <div class="caption">
             <span th:text="|${mediaEntity.entity.id}:${mediaEntity.entity.type}|">なまえ</span>
           </div>
