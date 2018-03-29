@@ -50,16 +50,21 @@
           <span>
             <a th:text="${urlEntity.URL}" th:href="@{${urlEntity.URL}}" target="_blank"></a>
           </span>
+          <a th:href="@{${urlEntity.URL}}" target="_blank" class="btn btn-primary">
+            ReOpen
+            <span class="glyphicon glyphicon-share-alt" aria-hidden="true">
+                        </span>
+          </a>
         </li>
       </ul>
     </div>
     <h5>Media entities</h5>
     <div class="row">
-      <div class="col-xs-6 col-md-3" th:each="mediaEntity: ${status.mediaEntities}">
-        <a th:href="@{|/tw/media?url=${mediaEntity.mediaURL}|}" class="thumbnail" target="_blank">
-          <img th:src="@{|/tw/media?url=${mediaEntity.mediaURL}|}" src="" />
+      <div class="col-xs-6 col-md-3" th:each="mediaEntity: ${mediaEntities}">
+        <a th:href="@{|/br?u=${mediaEntity.encUrl}|}" class="thumbnail" target="_blank">
+          <img th:src="@{|/br?u=${mediaEntity.encUrl}|}" src="" />
           <div class="caption">
-            <span th:text="|${mediaEntity.id}:${mediaEntity.type}|">なまえ</span>
+            <span th:text="|${mediaEntity.entity.id}:${mediaEntity.entity.type}|">なまえ</span>
           </div>
         </a>
       </div>
